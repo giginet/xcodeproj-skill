@@ -1,0 +1,18 @@
+{
+  "name": "xcodeproj",
+  "version": "1.0.0",
+  "description": "Inspect and modify Xcode projects (.xcodeproj) with the xcrun xcodeproj CLI from Xcode 27.2.",
+  "author": { "name": "giginet" },
+  "license": "MIT",
+  "homepage": "https://github.com/giginet/xcodeproj-skill",
+  "repository": "https://github.com/giginet/xcodeproj-skill",
+  "keywords": ["xcode", "xcodeproj", "apple", "ios", "macos", "build-settings"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Xcode Project",
+    "shortDescription": "Inspect and modify .xcodeproj files with xcrun xcodeproj",
+    "longDescription": "Drive Xcode 27.2's xcrun xcodeproj CLI to list and edit targets, build phases, build settings, groups, files and synchronized folders in both project.pbxproj and project.xcproj projects, plus recipes for creating projects, embedding app extensions, duplicating targets and adding Swift packages.",
+    "developerName": "giginet",
+    "category": "Developer Tools"
+  }
+}

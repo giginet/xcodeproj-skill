@@ -1,0 +1,20 @@
+{
+  "name": "xcodeproj",
+  "interface": {
+    "displayName": "Xcode Project"
+  },
+  "plugins": [
+    {
+      "name": "xcodeproj",
+      "source": {
+        "source": "local",
+        "path": "./plugins/xcodeproj"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: shellcheck
+        run: shellcheck plugins/xcodeproj/skills/manage-xcodeproj/scripts/*.sh plugins/xcodeproj/skills/manage-xcodeproj/scripts/tests/*.sh
+
+      - name: python syntax
+        run: python3 -m py_compile plugins/xcodeproj/skills/manage-xcodeproj/scripts/xcproj-package.py
+
+      - name: manifests are valid JSON
+        run: |
+          for f in .claude-plugin/marketplace.json .agents/plugins/marketplace.json plugins/xcodeproj/.claude-plugin/plugin.json plugins/xcodeproj/.codex-plugin/plugin.json; do
+            python3 -m json.tool "$f" > /dev/null
+          done
+
+      - name: xcproj-package.py unit tests (no Xcode needed)
+        run: plugins/xcodeproj/skills/manage-xcodeproj/scripts/tests/test-xcproj-package.sh
+
+  smoke:
+    # xcrun xcodeproj ships with Xcode 27.2. The step is skipped on runners
+    # whose selected Xcode does not have it, so the job stays green until the
+    # hosted images catch up.
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select the newest installed Xcode
+        run: |
+          newest="$(ls -d /Applications/Xcode*.app | sort -V | tail -1)"
+          echo "Selecting $newest"
+          sudo xcode-select -s "$newest"
+          xcodebuild -version
+
+      - name: Detect xcrun xcodeproj
+        id: detect
+        run: |
+          if xcrun --find xcodeproj >/dev/null 2>&1; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::xcrun xcodeproj not available in $(xcodebuild -version | head -1); skipping the end-to-end smoke test"
+            echo "available=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Unit tests
+        run: plugins/xcodeproj/skills/manage-xcodeproj/scripts/tests/test-xcproj-package.sh
+
+      - name: End-to-end smoke test
+        if: steps.detect.outputs.available == 'true'
+        run: plugins/xcodeproj/skills/manage-xcodeproj/scripts/tests/smoke.sh

@@ -1,0 +1,8 @@
+{
+  "name": "xcodeproj",
+  "owner": { "name": "giginet" },
+  "description": "Inspect and modify Xcode projects with the xcrun xcodeproj CLI (Xcode 27.2+).",
+  "plugins": [
+    { "name": "xcodeproj", "source": "./plugins/xcodeproj" }
+  ]
+}
