@@ -17,13 +17,16 @@ three helper scripts in this skill's `scripts/` directory.
 ## Preflight
 
 ```bash
-xcrun --find xcodeproj      # must print .../usr/bin/xcodeproj
-xcodebuild -version         # Xcode 27.2 or newer
+xcodebuild -version                                   # Xcode 27.2 or newer
+[ "$(xcrun --find xcodeproj)" = "$(xcode-select -p)/usr/bin/xcodeproj" ] && echo OK
 ```
 
-If `xcrun --find xcodeproj` fails, stop and tell the user: the selected Xcode
-(`xcode-select -p`) is older than 27.2, and this skill cannot proceed. Do not
-fall back to editing `project.pbxproj` by hand.
+The binary must be the one **inside the selected Xcode**: `xcrun --find` also
+searches `PATH`, and the unrelated CocoaPods Ruby gem installs a `xcodeproj`
+command there (its help starts with `Usage: xcodeproj ...` and it knows no
+`setting`/`target`/`group` subcommands). If the check fails, stop and tell the
+user that the selected Xcode (`xcode-select -p`) is older than 27.2; this skill
+cannot proceed. Do not fall back to editing `project.pbxproj` by hand.
 
 The helper scripts live in `scripts/` next to this file:
 

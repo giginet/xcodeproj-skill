@@ -24,7 +24,7 @@ while [ $# -gt 0 ]; do
     *) if [ -z "$SRC" ]; then SRC="$1"; elif [ -z "$DST" ]; then DST="$1"; else echo "error: too many arguments" >&2; exit 64; fi; shift ;;
   esac
 done
-[ -n "$SRC" ] && [ -n "$DST" ] || { usage >&2; exit 64; }
+if [ -z "$SRC" ] || [ -z "$DST" ]; then usage >&2; exit 64; fi
 
 # Every xcodeproj subcommand honours XCODEPROJ_PROJECT, which avoids having to
 # place -P after the subcommand (and before any '--') on each call.

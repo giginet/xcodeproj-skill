@@ -44,7 +44,9 @@ jobs:
       - name: Detect xcrun xcodeproj
         id: detect
         run: |
-          if xcrun --find xcodeproj >/dev/null 2>&1; then
+          # xcrun --find also searches PATH, where the CocoaPods xcodeproj gem lives
+          # on the hosted runners, so require the binary inside the selected Xcode.
+          if [ "$(xcrun --find xcodeproj 2>/dev/null)" = "$(xcode-select -p)/usr/bin/xcodeproj" ]; then
             echo "available=true" >> "$GITHUB_OUTPUT"
           else
             echo "::warning::xcrun xcodeproj not available in $(xcodebuild -version | head -1); skipping the end-to-end smoke test"

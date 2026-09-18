@@ -8,7 +8,10 @@ TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 fail() { echo "FAIL: $*" >&2; exit 1; }
 
-xcrun --find xcodeproj >/dev/null || fail "xcrun xcodeproj not found — Xcode 27.2+ required"
+# xcrun --find also searches PATH, where the unrelated CocoaPods `xcodeproj` gem
+# may live, so require the binary that ships inside the selected Xcode.
+[ "$(xcrun --find xcodeproj 2>/dev/null)" = "$(xcode-select -p)/usr/bin/xcodeproj" ] \
+  || fail "xcrun xcodeproj not found inside $(xcode-select -p) — Xcode 27.2+ required"
 
 cd "$TMP"
 "$SCRIPTS/new-xcodeproj.sh" --name SmokeApp --platforms macosx --deployment-target 15.0 >/dev/null
