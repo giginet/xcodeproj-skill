@@ -1,6 +1,6 @@
 {
   "name": "xcodeproj",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Inspect and modify Xcode projects (.xcodeproj) with the xcrun xcodeproj CLI from Xcode 27.2.",
   "author": { "name": "giginet" },
   "license": "MIT",

@@ -38,7 +38,7 @@ Find every file carrying the **current** version — do not trust a hardcoded li
 grep -rn "<current-version>" --include="*.json" .
 ```
 
-As of 1.0.0 that is two files:
+As of 0.1.0 that is two files:
 
 | File | How to update |
 |---|---|
